@@ -1,0 +1,4 @@
+Timestamp,Topic,Message
+2024-05-20 19:28:47,test/topic,Hello from MQTT Client
+2024-05-20 19:28:47,test/topic,Hello from MQTT Client
+2024-05-20 19:30:36,test/topic,"Temperatura: 23.5°C, Umidade: 45.2%, Veredito: aprovada, Tipo: Tipo1, Data e Hora: 2024-05-20 19:30:36, ID Serial: 1234567890123456, Número de Série: 462d53c8abac0"

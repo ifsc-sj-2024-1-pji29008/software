@@ -10,10 +10,10 @@ RUN apt-get update && \
 RUN pip install paho-mqtt
 
 # Copie o código do servidor MQTT para o contêiner
-COPY servidor.py /servidor.py
+COPY servidorMQTT.py /app/servidorMQTT.py
 
 # Defina o diretório de trabalho
-WORKDIR /servidor
+WORKDIR /app
 
 # Execute o servidor MQTT
-CMD ["python3", "servidor.py"]
+CMD ["mosquitto"]

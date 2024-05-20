@@ -1,0 +1,11 @@
+# Use a imagem base do Python
+FROM python:3.10-slim
+
+# Copie o código do servidor TCP/IP para o contêiner
+COPY servidor.py /app/servidor.py
+
+# Defina o diretório de trabalho
+WORKDIR /app
+
+# Execute o servidor TCP/IP
+CMD ["python", "servidor.py"]
