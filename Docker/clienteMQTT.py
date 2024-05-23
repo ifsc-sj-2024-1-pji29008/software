@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import datetime
 import threading
 import socket
+import time
 
 # Configurações do servidor MQTT
 broker_host = "localhost"
@@ -40,6 +41,12 @@ def send_data_to_server(data):
 
     except Exception as e:
         print(f"Erro ao enviar dados para o servidor: {e}")
+
+# Função para publicar dados MQTT periodicamente
+def publish_mqtt_data_periodically(client, interval):
+    while True:
+        publish_mqtt_data(client)
+        time.sleep(interval)
 
 # Função para publicar dados MQTT
 def publish_mqtt_data(client):
@@ -82,9 +89,6 @@ client.connect(broker_host, broker_port, 60)
 mqtt_thread = threading.Thread(target=mqtt_loop, args=(client,))
 mqtt_thread.start()
 
-# Envia dados para o servidor TCP/IP
-send_data_to_server_thread = threading.Thread(target=send_data_to_server, args=("Dados do cliente MQTT",))
-send_data_to_server_thread.start()
-
-# Publica dados MQTT
-publish_mqtt_data(client)
+# Iniciando o envio periódico de dados MQTT a cada 15 segundos
+publish_thread = threading.Thread(target=publish_mqtt_data_periodically, args=(client, 15))
+publish_thread.start()
