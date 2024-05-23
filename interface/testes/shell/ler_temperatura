@@ -1,0 +1,11 @@
+#!/bin/bash
+
+bus=$1
+bus_path="/sys/bus/w1/devices/w1_bus_master$bus"
+
+echo 0 > $bus_path/w1_master_pullup
+echo 1 > $bus_path/w1_master_search
+
+sensor=$(cat $bus_path/w1_master_slaves | grep -e "28-")
+
+cat $bus_path/$sensor/temperature
