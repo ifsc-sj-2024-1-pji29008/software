@@ -1,12 +1,144 @@
-openapi: '3.0.0'
+openapi: 3.0.1
 info:
-  title: API Title
-  version: '1.0'
+  title: API de Sensores 1-Wire
+  description: API para interação com sensores DS18B20 através de barramentos 1-Wire.
+  version: 1.0.0
 servers:
-  - url: https://api.server.test/v1
+  - url: http://127.0.0.1:5000
+    description: Servidor local para desenvolvimento e testes
 paths:
-  /test:
-    get:
+  /sensor_data:
+    post:
+      summary: Recebe dados do sensor e os escreve em um arquivo CSV
+      description: Recebe dados do sensor em formato JSON e os registra em um arquivo CSV com um timestamp.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Dados dos sensores, onde a chave é o identificador do sensor e o valor é a leitura do sensor.
+              additionalProperties:
+                type: number
+                description: Valor da leitura do sensor
       responses:
         '200':
-          description: OK
+          description: Dados recebidos e registrados com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+        '400':
+          description: Nenhum dado recebido ou formato de dado inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No data received"
+        '500':
+          description: Erro ao processar os dados recebidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error message describing what went wrong"
+
+  /barramento=1:
+    get:
+      summary: Lista todos os sensores conectados ao barramento 1
+      description: Retorna uma lista de todos os sensores DS18B20 conectados ao barramento 1.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  description: Identificador do sensor DS18B20
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error message describing what went wrong"
+
+  /barramento=1&sensor=1:
+    get:
+      summary: Obtém a temperatura do sensor 1 no barramento 1
+      description: Retorna a temperatura medida pelo sensor DS18B20 identificado como sensor 1 no barramento 1.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  temperatura:
+                    type: number
+                    description: Temperatura medida em graus Celsius
+                    example: 23.5
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error message describing what went wrong"
+
+  /barramento=2:
+    get:
+      summary: Lista todos os sensores conectados ao barramento 2
+      description: Retorna uma lista de todos os sensores DS18B20 conectados ao barramento 2.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  description: Identificador do sensor DS18B20
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error message describing what went wrong"
+
+  /:
+    get:
+      summary: Página inicial da API
+      description: Retorna uma mensagem de boas-vindas para a interface da API.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Interface WEB da Placa Raspberry"
