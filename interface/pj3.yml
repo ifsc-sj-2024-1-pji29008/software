@@ -53,7 +53,7 @@ paths:
                     type: string
                     example: "Error message describing what went wrong"
 
-  /barramento=1:
+  /barramento/1/sensores:
     get:
       summary: Lista todos os sensores conectados ao barramento 1
       description: Retorna uma lista de todos os sensores DS18B20 conectados ao barramento 1.
@@ -78,10 +78,10 @@ paths:
                     type: string
                     example: "Error message describing what went wrong"
 
-  /barramento=1&sensor=1:
+  /barramento/1/sensor/1:
     get:
       summary: Obtém a temperatura do sensor 1 no barramento 1
-      description: Retorna a temperatura medida pelo sensor DS18B20 identificado como sensor 1 no barramento 1.
+      description: Retorna o endereço e a temperatura medida pelo sensor DS18B20 identificado como sensor 1 no barramento 1.
       responses:
         '200':
           description: Sucesso
@@ -90,6 +90,10 @@ paths:
               schema:
                 type: object
                 properties:
+                  sensor_id:
+                    type: string
+                    description: Identificador do sensor DS18B20
+                    example: "28-000005e2fdc3"
                   temperatura:
                     type: number
                     description: Temperatura medida em graus Celsius
@@ -105,7 +109,7 @@ paths:
                     type: string
                     example: "Error message describing what went wrong"
 
-  /barramento=2:
+  /barramento/2/sensores:
     get:
       summary: Lista todos os sensores conectados ao barramento 2
       description: Retorna uma lista de todos os sensores DS18B20 conectados ao barramento 2.
@@ -119,6 +123,33 @@ paths:
                 items:
                   type: string
                   description: Identificador do sensor DS18B20
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error message describing what went wrong"
+
+  /barramento/2/sensor/1/temperatura:
+    get:
+      summary: Obtém a temperatura do sensor 1 no barramento 2
+      description: Retorna a temperatura medida pelo sensor DS18B20 identificado como sensor 1 no barramento 2.
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  temperatura:
+                    type: number
+                    description: Temperatura medida em graus Celsius
+                    example: 23.5
         '500':
           description: Erro interno do servidor
           content:
