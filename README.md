@@ -21,7 +21,7 @@ Este projeto é uma aplicação web que simula um sistema de monitoramento de se
 
 ## Requisitos
 
-- Python 3.12.3
+- Python 3.9+
 
 ## Configuração do Ambiente de Desenvolvimento
 
