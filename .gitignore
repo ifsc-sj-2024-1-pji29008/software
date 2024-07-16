@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pyzw
+
+# Logs
+logs/
+*.log
+
+# Virtual Environment
+venv/
+env/
+*.env
+
+# Dependencies
+/.venv/
+/.env/
+/.idea/
+/.vscode/
+/.pytest_cache/
+/.mypy_cache/
+/.coverage
+/.cache/
+/dist/
+/build/
+*.egg-info/
+*.egg
+*.whl
+
+# Database
+*.db
+*.sqlite
+
+# Gunicorn
+gunicorn.pid
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
