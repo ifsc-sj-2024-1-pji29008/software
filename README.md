@@ -61,6 +61,7 @@ project_root/
 │
 ├── app/
 │   ├── __init__.py         # Cria e configura a aplicação Flask
+│   ├── api.py              # Define os recursos da API (endpoints)
 │   ├── routes.py           # Define as rotas da aplicação (endpoints)
 │   ├── models.py           # Define os modelos de dados (usados com SQLAlchemy)
 │   ├── database.py         # Inicializa e configura o banco de dados (SQLAlchemy)

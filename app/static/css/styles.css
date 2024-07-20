@@ -1,0 +1,58 @@
+body {
+    background-color: #343a40; /* Fundo escuro */
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+#switch {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.connector {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    background-color: #6c757d; /* Cor padrão do conector */
+    border: 2px solid #343a40;
+    border-radius: 5px;
+}
+
+.connector.pass {
+    background-color: #28a745; /* Verde para pass */
+}
+
+.connector.fail {
+    background-color: #dc3545; /* Vermelho para fail */
+}
+
+.fixed-card-height {
+    height: 200px; /* Ajuste este valor conforme necessário */
+}
+
+.fixed-card-height .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.fixed-card-height .card-text {
+    flex-grow: 1;
+}
