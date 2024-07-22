@@ -37,5 +37,5 @@ def post_barramento_1():
         return jsonify({"mensagem": "Dados recebidos com sucesso!"}), 201
     except Exception as e:
         # Em caso de erro, retorna uma mensagem de erro
-        return jsonify({"error": str(e)}), 500   
+        return jsonify({"error": str(e)}), 500
 

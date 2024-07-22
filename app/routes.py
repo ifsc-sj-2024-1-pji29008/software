@@ -1,4 +1,11 @@
+from re import S
+from venv import logger
+from .planos import test_temp
+from .database import db
+from .models import Sensor, StatusPlano
+
 from flask import render_template, Blueprint, jsonify
+from loguru import logger
 
 import time
 import  threading
@@ -24,20 +31,37 @@ def index():
 
 # Rota para a página de resultados
 @bp.route('/plano/<plano>')
-def plano_result(plano):
-    threading.Thread(target=simulate_verdicts, args=(plano,)).start()
+def plano_result(plano):    
+    # Simulando a execução dos testes em uma thread
+    # threading.Thread(target=simulate_verdicts, args=(plano,)).start()
+    # threading.Thread(target=test_temp,).start()
+    test_temp()
+    
     return render_template('plano_result.html', plano=plano)
 
-# Rota para a coleta do status
-@bp.route('/api/vereditos/<plano>')
-def get_verdicts(plano):
-    selected_verdicts = verdicts.get(plano, ['pending', 'pending', 'pending', 'pending'])
-    return jsonify(selected_verdicts)
+# Rota com os vereditos dos testes
+@bp.route('/api/vereditos')
+def get_verdicts():
+    # Coleta os vereditos do banco de dados
+    veredicts = Sensor.query.all()
+    to_send = []
+    for i in range(0, 4):
+        logger.info(veredicts[i].verdict)
+        to_send.append(veredicts[i].verdict)
 
+    
+    
+    return jsonify(to_send)
+
+# Simula a coleta do status
 @bp.route('/api/status/<plano>')
 def get_status(plano):
-    selected_verdicts = verdicts.get(plano, ['pending', 'pending', 'pending', 'pending'])
-    if 'pending' in selected_verdicts:
+    # Coleta o status do plano
+    logger.debug(plano)
+    status = StatusPlano.query.filter_by(plano=plano).first()
+    status = status.status
+    print(status)
+    if status == 'pending':
         return jsonify({"status": "pending"})
-    else:
+    elif status == 'complete':
         return jsonify({"status": "complete"})

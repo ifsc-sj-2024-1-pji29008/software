@@ -65,7 +65,7 @@
             };
 
             const fetchVerdicts = () => {
-                fetch(`/api/vereditos/${plano}`)
+                fetch(`/api/vereditos`)
                     .then(response => response.json())
                     .then(verdicts => {
                         for (let i = 1; i <= 4; i++) {
