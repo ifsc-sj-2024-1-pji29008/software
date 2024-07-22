@@ -11,7 +11,7 @@ from loguru import logger
 
 # Plano de testes de temperatura
 def test_temp():
-    ow = onewire('/home/mike/ifsc/pj3/software/app/temp/sys/bus/w1/devices')
+    ow = onewire('sys/bus/w1/devices')
     sensors = {}
     # Garantir que o sensor foi encontrado
     barramentos = ow.list_w1_buses()
