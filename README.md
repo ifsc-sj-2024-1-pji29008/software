@@ -51,7 +51,7 @@ export FLASK_ENV=development
 ### Iniciar a aplicação
 
 ```bash
-$ flask run
+./run.py
 ```
 
 ## Estrutura do Projeto
