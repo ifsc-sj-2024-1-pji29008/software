@@ -97,3 +97,26 @@ class onewire:
 
         w1_bus_name = self._w1_buses[w1_bus_number-1]
         return self._w1_ds18b20_sensors[w1_bus_name][sensor_id-1]
+
+class sensor:
+    def __init__(self, w1_system_path='/sys/bus/w1/devices'):
+        self._w1 = onewire(w1_system_path)
+
+    def get_temperature(self, w1_bus_number):
+        return self._w1.get_temperature(w1_bus_number, 1)
+
+    def get_address(self, w1_bus_number):
+        return self._w1.get_address(w1_bus_number, 1)
+
+    def list_w1_buses(self):
+        return self._w1.list_w1_buses()
+
+    def list_sensors(self):
+        sensors = []
+        for index, bus in enumerate(self.list_w1_buses()):
+            sensors.append(self._w1.get_address(index + 1, 1))
+
+        return sensors
+
+    def get_sensor_amount():
+        return len(self._w1.list_w1_buses())
