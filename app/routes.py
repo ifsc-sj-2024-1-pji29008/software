@@ -4,7 +4,7 @@ from .planos import test_temp
 from .database import db
 from .models import Sensor, StatusPlano
 
-from flask import render_template, Blueprint, jsonify
+from flask import render_template, Blueprint, jsonify, current_app
 from loguru import logger
 
 import time
@@ -33,21 +33,20 @@ def index():
 @bp.route('/plano/<plano>')
 def plano_result(plano):    
     # Simulando a execução dos testes em uma thread
-    # threading.Thread(target=simulate_verdicts, args=(plano,)).start()
-    # threading.Thread(target=test_temp,).start()
-    test_temp()
-    
+    threading.Thread(target=simulate_verdicts, args=(plano,)).start()
+    threading.Thread(target=test_temp, args=(current_app.app_context(),)).start()
+
     return render_template('plano_result.html', plano=plano)
 
 # Rota com os vereditos dos testes
 @bp.route('/api/vereditos')
 def get_verdicts():
     # Coleta os vereditos do banco de dados
-    veredicts = Sensor.query.all()
+    verdicts = Sensor.query.all()
     to_send = []
     for i in range(0, 4):
-        logger.info(veredicts[i].verdict)
-        to_send.append(veredicts[i].verdict)
+        logger.info(verdicts[i].verdict)
+        to_send.append(verdicts[i].verdict)
 
     
     
