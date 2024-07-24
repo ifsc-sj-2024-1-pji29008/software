@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import current_app
 
 from audioop import add
 from .lib.jpmsb import onewire
@@ -10,7 +10,8 @@ from time import sleep
 from loguru import logger
 
 # Plano de testes de temperatura
-def test_temp():
+def test_temp(app_context):
+    app_context.push()
     ow = onewire('app/temp/sys/bus/w1/devices')
     sensors = {}
     # Garantir que o sensor foi encontrado
