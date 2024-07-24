@@ -41,13 +41,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Configurar as variáveis de ambiente
-
-```bash
-export FLASK_APP=run.py
-export FLASK_ENV=development
-```
-
 ### Iniciar a aplicação
 
 ```bash
