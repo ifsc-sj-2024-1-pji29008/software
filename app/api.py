@@ -1,41 +1,54 @@
-from flask import Blueprint, jsonify, request
+from .models import Sensor, StatusPlano
+from .database import db
+from .planos import test_temp
+
+from flask import Blueprint, current_app, jsonify, request
 from loguru import logger
 
+import threading
 
 bp = Blueprint("api", __name__, url_prefix="/api")
 
-@bp.route('/resultados', methods=['GET'])
-def get_barramento_1():
+
+# Rota com os vereditos dos testes
+@bp.route("/vereditos")
+def get_verdicts():
+    # Coleta os vereditos do banco de dados
+    verdicts = Sensor.query.all()
+    to_send = []
+    for i in range(0, 4):
+        logger.info(verdicts[i].verdict)
+        to_send.append(verdicts[i].verdict)
+    return jsonify(to_send)
+
+
+# Simula a coleta do status
+@bp.route("/status/<plano>", methods=["GET"])
+def get_status(plano):
+    # Coleta o status do plano
+    logger.debug(plano)
+    status = StatusPlano.query.filter_by(plano=plano).first()
+    status = status.status
+    print(status)
+    if status == "pending":
+        return jsonify({"status": "pending"})
+    elif status == "complete":
+        return jsonify({"status": "complete"})
+
+
+# Inicia execução do plano
+@bp.route("/iniciar/<plano>", methods=["POST"])
+def iniciar_plano(plano):
+    # Altera o status do plano para pending
+    status = StatusPlano.query.filter_by(plano=plano).first()
+    status.status = "pending"
+    db.session.add(status)
+
     try:
-        # pega o resultados do banco de dados
-        resultados = {
-            "sensor1": {
-                "plano_1": "PASSOU",
-                "plano_2": "PASSOU",
-                "plano_3": "PASSOU"
-            },
-            "sensor2": {
-                "plano_1": "PASSOU",
-                "plano_2": "PASSOU",
-                "plano_3": "TEMPERATURA_ALTA"
-            }
-        }
-        return jsonify(resultados), 200
+        # Salva no banco de dados
+        db.session.commit()
+        # Inicia o plano
+        threading.Thread(target=test_temp, args=(current_app.app_context(),)).start()
+        return jsonify({"status": "pending"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
-    
-@bp.route('/resultados', methods=['POST'])
-def post_barramento_1():
-    try:
-        # Recebe os dados do corpo da requisição
-        dados = request.json
-        # Aqui você pode adicionar a lógica para processar os dados recebidos e salvar no banco de dados
-        # Por exemplo, salvar os dados em uma tabela de resultados
-
-        # Retorna uma resposta de sucesso
-        return jsonify({"mensagem": "Dados recebidos com sucesso!"}), 201
-    except Exception as e:
-        # Em caso de erro, retorna uma mensagem de erro
-        return jsonify({"error": str(e)}), 500
-
