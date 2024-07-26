@@ -1,4 +1,4 @@
-from .planos import test_temp
+from .planos import seleciona_plano
 from .jiga_data import planos_info
 
 from flask import render_template, Blueprint, current_app
@@ -29,5 +29,11 @@ def plano_result(plano):
         plano, {"nome": "Plano não reconhecido", "descricao": "Plano não reconhecido."}
     )
     # Simulando a execução dos testes em uma thread
-    threading.Thread(target=test_temp, args=(current_app.app_context(),)).start()
+    threading.Thread(
+        target=seleciona_plano,
+        args=(
+            current_app.app_context(),
+            plano,
+        ),
+    ).start()
     return render_template("plano_result.html", plano=plano, info=info)

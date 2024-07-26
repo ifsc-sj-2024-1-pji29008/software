@@ -1,5 +1,3 @@
-
-
 planos_info = {
     "temperatura": {
         "nome": "Temperatura",

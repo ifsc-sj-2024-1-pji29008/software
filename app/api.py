@@ -1,6 +1,6 @@
 from .models import Sensor, StatusPlano
 from .database import db
-from .planos import test_temp
+from .planos import seleciona_plano
 
 from flask import Blueprint, current_app, jsonify, request
 from loguru import logger
@@ -48,7 +48,13 @@ def iniciar_plano(plano):
         # Salva no banco de dados
         db.session.commit()
         # Inicia o plano
-        threading.Thread(target=test_temp, args=(current_app.app_context(),)).start()
+        threading.Thread(
+            target=seleciona_plano,
+            args=(
+                current_app.app_context(),
+                plano,
+            ),
+        ).start()
         return jsonify({"status": "pending"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
