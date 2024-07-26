@@ -30,7 +30,7 @@ Utilizando um sistema operacional baseado em Unix (Linux ou macOS), siga as inst
 ### Clonar o repositório
 
 ```bash
-git clone -b 0.0.1 https://github.com/ifsc-sj-2024-1-pji29008/software.git
+git clone https://github.com/ifsc-sj-2024-1-pji29008/software.git
 ```
 
 ### Criar um ambiente virtual e instalar as dependências
