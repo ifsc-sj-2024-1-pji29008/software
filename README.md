@@ -1,6 +1,23 @@
 # Jiga de Testes
 Este projeto é uma uma aplicação para a Raspberry Pi que possui planos de teste com o objetivo de testar sensores DS18b20 que coletam informações de temperatura e umidade do ambiente. Os planos de teste são compostos por um conjunto de regras que definem o comportamento esperado dos sensores em determinadas condições de teste. A aplicação possui uma API que controla o inicio dos testes e fornece os dados coletados pelos sensores e os vereditos de cada plano.
 
+## Sumário
+
+- [Jiga de Testes](#jiga-de-testes)
+  - [Sumário](#sumário)
+  - [Tecnologias](#tecnologias)
+  - [Requisitos](#requisitos)
+  - [Configuração do Ambiente de Desenvolvimento](#configuração-do-ambiente-de-desenvolvimento)
+    - [Clonar o repositório](#clonar-o-repositório)
+    - [Criar um ambiente virtual e instalar as dependências](#criar-um-ambiente-virtual-e-instalar-as-dependências)
+    - [Iniciar a aplicação](#iniciar-a-aplicação)
+  - [Trabalhando com versionamento](#trabalhando-com-versionamento)
+    - [Criar um novo branch apartir do branch principal](#criar-um-novo-branch-apartir-do-branch-principal)
+    - [Adicionar e commitar as alterações](#adicionar-e-commitar-as-alterações)
+    - [Enviar as alterações para o repositório remoto](#enviar-as-alterações-para-o-repositório-remoto)
+  - [Estrutura do Projeto](#estrutura-do-projeto)
+
+
 ## Tecnologias
 
 - **Flask**: Um framework web leve e modular para Python.
