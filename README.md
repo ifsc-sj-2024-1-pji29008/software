@@ -1,23 +1,11 @@
-# Em construção
-
-## Descrição
-
-Este projeto é uma aplicação web que simula um sistema de monitoramento de sensores de temperatura e umidade. A aplicação é construída com Flask, um framework web leve e modular para Python.
-
-## Funcionalidades
-
-- **Listagem de Sensores**: Visualize todos os sensores cadastrados.
-- **Detalhes do Sensor**: Veja informações detalhadas de um sensor específico.
-- **Tipos de Sensores**: Veja o tipo de dispositivo que está sendo utilizado.
+# Jiga de Testes
+Este projeto é uma uma aplicação para a Raspberry Pi que possui planos de teste com o objetivo de testar sensores DS18b20 que coletam informações de temperatura e umidade do ambiente. Os planos de teste são compostos por um conjunto de regras que definem o comportamento esperado dos sensores em determinadas condições de teste. A aplicação possui uma API que controla o inicio dos testes e fornece os dados coletados pelos sensores e os vereditos de cada plano.
 
 ## Tecnologias
 
 - **Flask**: Um framework web leve e modular para Python.
 - **SQLite**: Um sistema de gerenciamento de banco de dados relacional.
 - **Jinja2**: Um mecanismo de template para Python.
-- **Gunicorn**: Um servidor HTTP WSGI para Python.
-- **Nginx**: Um servidor web de código aberto.
-- **Supervisor**: Um sistema de controle de processos para sistemas operacionais Unix.
 
 ## Requisitos
 
@@ -46,6 +34,34 @@ pip install -r requirements.txt
 ```bash
 ./run.py
 ```
+
+## Trabalhando com versionamento
+Quando for trabalhar em uma nova funcionalidade ou correção de bug, siga os passos abaixo para criar um novo branch e enviar as alterações para o repositório remoto.
+
+### Criar um novo branch apartir do branch principal
+
+```bash
+git checkout main
+git pull
+git checkout -b nome-do-branch
+```
+Com isso já é possivel trabalhar na nova funcionalidade ou correção de bug sem que qualquer alteração afete o branch principal e vice-versa.
+
+### Adicionar e commitar as alterações
+Ao finalizar as alterações, adicione e commit as alterações feitas.
+
+```bash
+git add .
+git commit -m "Mensagem do commit"
+```
+
+### Enviar as alterações para o repositório remoto
+
+```bash
+git push origin nome-do-branch
+```
+Com isso as alterações feitas no branch local serão enviadas para o repositório remoto. É comum que o repositório possua um `curador` que irá revisar as alterações e aceitar ou recusar as alterações. Ele que irá mesclar as alterações com o branch principal.
+
 
 ## Estrutura do Projeto
 
