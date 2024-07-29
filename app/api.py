@@ -97,7 +97,7 @@ def inicia_execucao():
 ######################
 
 # Rota com os vereditos dos testes
-@bp.route("/execucoes/vereditos")
+@bp.route("/vereditos")
 def get_verdicts():
     # Coleta os vereditos do banco de dados
     verdicts = Sensor.query.all()
