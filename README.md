@@ -11,6 +11,7 @@ Este projeto é uma uma aplicação para a Raspberry Pi que possui planos de tes
     - [Clonar o repositório](#clonar-o-repositório)
     - [Criar um ambiente virtual e instalar as dependências](#criar-um-ambiente-virtual-e-instalar-as-dependências)
     - [Iniciar a aplicação](#iniciar-a-aplicação)
+  - [Documentação da API](#documentação-da-api)
   - [Trabalhando com versionamento](#trabalhando-com-versionamento)
     - [Criar um novo branch apartir do branch principal](#criar-um-novo-branch-apartir-do-branch-principal)
     - [Adicionar e commitar as alterações](#adicionar-e-commitar-as-alterações)
@@ -51,6 +52,10 @@ pip install -r requirements.txt
 ```bash
 ./run.py
 ```
+
+## Documentação da API
+
+A documentação da API pode ser acessada utilizando a URI `/apidocs` após a inicialização da aplicação. A documentação é gerada automaticamente com base nos recursos e rotas definidos na aplicação.
 
 ## Trabalhando com versionamento
 Quando for trabalhar em uma nova funcionalidade ou correção de bug, siga os passos abaixo para criar um novo branch e enviar as alterações para o repositório remoto.
