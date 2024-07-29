@@ -1,0 +1,10 @@
+responses:
+  200:
+    description: Status do sistema
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string

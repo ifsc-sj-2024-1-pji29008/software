@@ -1,76 +1,100 @@
+import re
 from .models import Sensor, StatusPlano
 from .database import db
 from .planos import seleciona_plano
 
-from flask import Blueprint, current_app, jsonify
+from flask import Blueprint, jsonify, request, current_app
 from loguru import logger
+from flasgger import swag_from
 
 import threading
 
 bp = Blueprint("api", __name__, url_prefix="/api")
 
 
-# ######
-# #   GET
-# ######
+#################
+###    GET   ###
+#################
+
+@bp.route("/execucoes", methods=["GET"])
+@swag_from('swagger_docs/get_execucoes.yaml')
+def get_execucoes():
+    fake = {"plano": "plano1", "timestamp": "2021-01-01 00:00:00", "status": "concluido"}
+    return jsonify(fake)
 
 
-# @bp.route("/execucoes", methods=["GET"])
-# def get_execucoes():
-#     # Retorna plano, timestamp, status
-#     pass
+@bp.route("/execucoes/<timestamp>", methods=["GET"])
+@swag_from('swagger_docs/get_execucao.yaml')
+def get_execucao(timestamp):
+    fake = {"plano": "plano1", "sensores": [{"num-serie": "123", "veredito": "ok", "posicao": "1"}]}
+    return jsonify(fake)
 
 
-# @bp.route("/execucoes/<timestamp>", methods=["GET"])
-# def get_execucao():
-#     # Retorna plano, [sensores(num-serie, veredito, posicao)]
-#     pass
+@bp.route("/sensores", methods=["GET"])
+@swag_from('swagger_docs/get_sensores.yaml')
+def get_sensores():
+    fake = {"num-serie": "123"}
+    return jsonify(fake)
 
 
-# @bp.route("/sensores", methods=["GET"])
-# def get_sensores():
-#     # Retorna num-serie
-#     pass
+@bp.route("/sensores/<numserie>", methods=["GET"])
+@swag_from('swagger_docs/get_sensor.yaml')
+def get_sensor(numserie):
+    fake = {"num-serie": "123", "dados": [{"timestamp": "2021-01-01 00:00:00", "veredito": "ok", "posicao": "1"}]}
+    return jsonify(fake)
 
 
-# @bp.route("/sensores/<numserie>", methods=["GET"])
-# def get_sensor():
-#     # Retorna num-serie, [(timestamp-execucao, veredito, posicao)]
-#     pass
+@bp.route("/sensores/<numserie>/dados", methods=["GET"])
+@swag_from('swagger_docs/get_sensor_dados.yaml')
+def get_sensor_dados(numserie):
+    fake = {"num-serie": "123", "dados": [{"timestamp": "2021-01-01 00:00:00", "veredito": "ok", "posicao": "1"}]}
+    return jsonify(fake)
 
 
-# @bp.route("/sensores/<numserie>/dados", methods=["GET"])
-# def get_sensor_dados():
-#     # Retorna dados do sensor, com possibilidade de filtrar por timestamp
-#     pass
+@bp.route("/status", methods=["GET"])
+@swag_from('swagger_docs/get_status.yaml')
+def get_stats():
+    fake = {"status": "livre"}
+    return jsonify(fake)
 
 
-# @bp.route("/status", methods=["GET"])
-# def get_stats():
-#     # Verifica se existem execucoes em andamento
-#     # Se sim, retorna status: "ocupado, timestamp-execucao"
-#     # Se não, retorna status: "livre"
-#     pass
+#################
+###    POST   ###
+#################
 
 
-# ######
-# #   POST
-# ######
+@bp.route("/reset", methods=["POST"])
+@swag_from('swagger_docs/post_reset.yaml')
+def reset():
+    pass
 
 
-# @bp.route("/reset", methods=["POST"])
-# def reset():
-#     # Reseta banco de dados
-#     pass
+@bp.route("/execucoes", methods=["POST"])
+@swag_from('swagger_docs/post_execucao.yaml')
+def inicia_execucao():
+    req = request.get_json()
+    plano = req.get("plano")
+    if not plano:
+        return jsonify({"error": "Plano não encontrado"}), 400
+    
+    status = StatusPlano.query.first()
+    if status:
+        return jsonify({"error": "Execução em andamento"}), 400
+    
+    status = StatusPlano(plano=plano)
+    db.session.add(status)
+    db.session.commit()
+    
+    thread = threading.Thread(target=seleciona_plano, args=(plano,))
+    thread.start()
+    
+    return jsonify({"message": "Execução iniciada"}), 200
 
 
-# @bp.route("/execucoes", methods=["POST"])
-# def inicia_execucao():
-#     # Le o corpo da requisicao
-#     # Inicia execucao
-#     # Retorna timestamp da execucao
-#     pass
 
+######################
+### PARA REMOVER   ###
+######################
 
 # Rota com os vereditos dos testes
 @bp.route("/execucoes/vereditos")

@@ -1,0 +1,14 @@
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          plano:
+            type: string
+responses:
+  200:
+    description: Execução iniciada
+  400:
+    description: Erro ao iniciar execução

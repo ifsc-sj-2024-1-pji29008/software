@@ -1,0 +1,10 @@
+responses:
+  200:
+    description: Lista de sensores
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            num-serie:
+              type: string

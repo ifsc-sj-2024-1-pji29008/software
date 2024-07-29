@@ -1,0 +1,3 @@
+responses:
+  200:
+    description: Banco de dados resetado

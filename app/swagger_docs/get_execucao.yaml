@@ -1,0 +1,27 @@
+parameters:
+  - name: timestamp
+    in: path
+    required: true
+    schema:
+      type: string
+responses:
+  200:
+    description: Detalhes da execução
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            plano:
+              type: string
+            sensores:
+              type: array
+              items:
+                type: object
+                properties:
+                  num-serie:
+                    type: string
+                  veredito:
+                    type: string
+                  posicao:
+                    type: string

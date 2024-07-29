@@ -1,5 +1,8 @@
 from flask import Flask
+from flasgger import Swagger
+
 from loguru import logger
+
 from .database import db, init_db
 
 
@@ -15,6 +18,8 @@ def create_app():
 
     # Configura o logger para salvar os logs em um arquivo
     logger.add("logs/app.log", rotation="50 MB")
+    
+    swagger = Swagger(app)
 
     # Registra as rotas da interface WEB na aplicação
     from . import routes

@@ -1,0 +1,27 @@
+parameters:
+  - name: numserie
+    in: path
+    required: true
+    schema:
+      type: string
+responses:
+  200:
+    description: Dados do sensor
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            num-serie:
+              type: string
+            dados:
+              type: array
+              items:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                  veredito:
+                    type: string
+                  posicao:
+                    type: string

@@ -1,0 +1,14 @@
+responses:
+  200:
+    description: Lista de execuções
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            plano:
+              type: string
+            timestamp:
+              type: string
+            status:
+              type: string
