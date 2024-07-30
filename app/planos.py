@@ -19,7 +19,10 @@ def plano_temperatura(ow_sensor):
             continue
             
         # Veredito
-        if temperature > 40:
+        if not temperature:
+            continue
+
+        if temperature > 30:
             verdict = "fail"
         else:
             verdict = "pass"
