@@ -39,6 +39,22 @@
             <div class="connector" id="connector3"></div>
             <div class="connector" id="connector4"></div>
         </div>
+        <div id="verdicts" class="mt-5 d-none">
+            <h2 class="text-center">Vereditos dos Sensores</h2>
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Número de Série</th>
+                        <th>Temperatura</th>
+                        <th>Veredito</th>
+                    </tr>
+                </thead>
+                <tbody id="verdicts-table">
+                    <!-- Dados dos vereditos serão inseridos aqui -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
@@ -56,6 +72,7 @@
                         if (data.status === 'complete') {
                             document.getElementById('loading').classList.add('d-none');
                             document.getElementById('switch').classList.remove('d-none');
+                            document.getElementById('verdicts').classList.remove('d-none');
                             fetchVerdicts();
                         } else {
                             setTimeout(checkStatus, 2000); // Verifica novamente em 2 segundos
@@ -68,12 +85,31 @@
                 fetch(`/api/vereditos`)
                     .then(response => response.json())
                     .then(verdicts => {
-                        for (let i = 1; i <= 4; i++) {
-                            const connector = document.getElementById('connector' + i);
-                            connector.className = 'connector ' + verdicts[i - 1];
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
+                        const tableBody = document.getElementById('verdicts-table');
+                        tableBody.innerHTML = ''; // Limpa qualquer dado anterior
+                        verdicts.forEach((verdict, index) => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${index + 1}</td>
+                                <td>${verdict.serialNumber}</td>
+                                <td>${verdict.temperature}</td>
+                                <td>${verdict.verdict}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+
+                        // Limpa os elementos de connector existentes
+                        const connectorsContainer = document.getElementById('switch');
+                        connectorsContainer.innerHTML = '';
+
+                        // Atualiza o switch com os vereditos
+                        verdicts.forEach((verdict, index) => {
+                            const connector = document.createElement('div');
+                            connector.id = 'connector' + (index + 1);
+                            connector.className = 'connector ' + verdict.verdict;
+                            connectorsContainer.appendChild(connector);
+                        });
+                    });
             };
 
             checkStatus();
