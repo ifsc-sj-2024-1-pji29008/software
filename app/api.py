@@ -100,11 +100,16 @@ def inicia_execucao():
 @bp.route("/vereditos")
 def get_verdicts():
     # Coleta os vereditos do banco de dados
-    verdicts = Sensor.query.all()
-    to_send = []
-    for i in range(0, 4):
-        logger.info(verdicts[i].verdict)
-        to_send.append(verdicts[i].verdict)
+    sensor_data = Sensor.query.all()
+    to_send = []    
+    for sensor in sensor_data:
+        to_send.append(
+            {
+                "serialNumber": sensor.serialNumber,
+                "temperature": sensor.temperature,
+                "verdict": sensor.verdict,
+            }
+        )    
     return jsonify(to_send)
 
 
