@@ -1,6 +1,6 @@
 responses:
   200:
-    description: Lista de sensores
+    description: Lista de planos
     content:
       application/json:
         schema:
@@ -8,16 +8,14 @@ responses:
           items:
             type: object
             properties:
-              num-serie:
+              plano:
                 type: string
-              modelo:
-                type: string
-              localizacao:
+              timestamp:
                 type: string
               status:
                 type: string
   404:
-    description: Nenhum sensor encontrado
+    description: Nenhum plano encontrado
     content:
       application/json:
         schema:

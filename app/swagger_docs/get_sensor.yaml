@@ -25,3 +25,16 @@ responses:
                     type: string
                   posicao:
                     type: string
+                  temperatura:
+                    type: string
+                  umidade:
+                    type: string
+  404:
+    description: Sensor não encontrado
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string

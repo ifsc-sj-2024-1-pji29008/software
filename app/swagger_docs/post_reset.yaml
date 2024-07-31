@@ -1,3 +1,23 @@
 responses:
   200:
     description: Banco de dados resetado
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            mensagem:
+              type: string
+  500:
+    description: Erro ao resetar banco de dados
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+            detalhes:
+              type: string

@@ -1,19 +1,30 @@
 parameters:
-  - name: numserie
+  - name: id
     in: path
     required: true
     schema:
       type: string
 responses:
   200:
-    description: Dados do sensor
+    description: Detalhes do plano
     content:
       application/json:
         schema:
           type: object
           properties:
-            num-serie:
-              type: string
+            vereditos:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  sensor:
+                    type: string
+                  resultado:
+                    type: string
+                  timestamp:
+                    type: string
             dados:
               type: array
               items:
@@ -21,16 +32,12 @@ responses:
                 properties:
                   timestamp:
                     type: string
-                  veredito:
-                    type: string
                   posicao:
                     type: string
                   temperatura:
                     type: string
-                  umidade:
-                    type: string
   404:
-    description: Sensor não encontrado
+    description: Plano não encontrado
     content:
       application/json:
         schema:

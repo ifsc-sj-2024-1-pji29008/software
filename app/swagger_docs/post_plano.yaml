@@ -1,0 +1,53 @@
+parameters:
+  - name: nome
+    in: path
+    required: true
+    schema:
+      type: string
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          plano:
+            type: string
+            example: "temperatura"
+        required:
+          - plano
+responses:
+  200:
+    description: Execução iniciada
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: "Execução iniciada"
+            mensagem:
+              type: string
+              example: "Plano iniciado"
+  400:
+    description: Erro ao iniciar execução
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Plano inválido"
+  404:
+    description: Plano não encontrado
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Plano não encontrado"

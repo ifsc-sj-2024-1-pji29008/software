@@ -8,3 +8,16 @@ responses:
           properties:
             status:
               type: string
+            uptime:
+              type: string
+            version:
+              type: string
+  500:
+    description: Erro no servidor
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
