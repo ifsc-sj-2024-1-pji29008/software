@@ -34,10 +34,6 @@
         </div>
         <div id="switch" class="mt-5 d-none">
             <!-- Conectores do switch -->
-            <div class="connector" id="connector1"></div>
-            <div class="connector" id="connector2"></div>
-            <div class="connector" id="connector3"></div>
-            <div class="connector" id="connector4"></div>
         </div>
         <div id="verdicts" class="mt-5 d-none">
             <h2 class="text-center">Vereditos dos Sensores</h2>
@@ -46,7 +42,6 @@
                     <tr>
                         <th>#</th>
                         <th>Número de Série</th>
-                        <th>Temperatura</th>
                         <th>Veredito</th>
                     </tr>
                 </thead>
@@ -65,11 +60,12 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const plano = "{{ plano }}";
+            console.log(plano);
             const checkStatus = () => {
-                fetch(`/api/status/${plano}`)
+                fetch(`/api/status`)
                     .then(response => response.json())
                     .then(data => {
-                        if (data.status === 'complete') {
+                        if (data.status === 'livre') {
                             document.getElementById('loading').classList.add('d-none');
                             document.getElementById('switch').classList.remove('d-none');
                             document.getElementById('verdicts').classList.remove('d-none');
@@ -82,18 +78,18 @@
             };
 
             const fetchVerdicts = () => {
-                fetch(`/api/vereditos`)
+                fetch(`/api/planos/${plano}`)
                     .then(response => response.json())
-                    .then(verdicts => {
+                    .then(data => {
+                        console.log(data);
                         const tableBody = document.getElementById('verdicts-table');
                         tableBody.innerHTML = ''; // Limpa qualquer dado anterior
-                        verdicts.forEach((verdict, index) => {
+                        data.vereditos.forEach((dt, index) => {
                             const row = document.createElement('tr');
                             row.innerHTML = `
                                 <td>${index + 1}</td>
-                                <td>${verdict.serialNumber}</td>
-                                <td>${verdict.temperature}</td>
-                                <td>${verdict.verdict}</td>
+                                <td>${dt.sensor}</td>
+                                <td>${dt.resultado}</td>
                             `;
                             tableBody.appendChild(row);
                         });
@@ -103,10 +99,10 @@
                         connectorsContainer.innerHTML = '';
 
                         // Atualiza o switch com os vereditos
-                        verdicts.forEach((verdict, index) => {
+                        data.vereditos.forEach((ver, index) => {
                             const connector = document.createElement('div');
                             connector.id = 'connector' + (index + 1);
-                            connector.className = 'connector ' + verdict.verdict;
+                            connector.className = 'connector ' + ver.resultado;
                             connectorsContainer.appendChild(connector);
                         });
                     });

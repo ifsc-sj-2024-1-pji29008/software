@@ -28,7 +28,7 @@
         <h1 class="text-center">Informações do Plano - {{ info.nome }}</h1>
         <p class="text-center">{{ info.descricao }}</p>
         <div class="text-center mt-4">
-            <a href="{{ url_for('main.plano_result', plano=plano) }}" class="btn btn-primary">Iniciar Teste</a>
+            <button id="start-plan-btn" class="btn btn-primary">Iniciar Teste</button>
         </div>
     </div>
 
@@ -36,5 +36,30 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('start-plan-btn').addEventListener('click', function() {
+            fetch('{{ url_for("api.inicia_plano", nome=plano) }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'executando') {
+                    const id = data.id;
+                    const planoResultUrl = `{{ url_for("main.plano_result", planoid="") }}` + id; // Adiciona o ID corretamente
+                    console.log(planoResultUrl);
+                    window.location.href = planoResultUrl;
+                } else {
+                    alert('Erro ao iniciar o plano: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao iniciar o plano.');
+            });
+        });
+    </script>
 </body>
 </html>
