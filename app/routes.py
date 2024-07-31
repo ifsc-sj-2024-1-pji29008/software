@@ -1,3 +1,4 @@
+from app.models import Plano
 from .planos import seleciona_plano
 from .jiga_data import planos_info
 
@@ -23,17 +24,10 @@ def plano_info(plano):
 
 
 # Rota para a página de resultados
-@bp.route("/plano/<plano>")
-def plano_result(plano):
+@bp.route("/plano/<planoid>")
+def plano_result(planoid):
+    pl = Plano.query.get(int(planoid))
     info = planos_info.get(
-        plano, {"nome": "Plano não reconhecido", "descricao": "Plano não reconhecido."}
+        pl.nome, {"nome": "Plano não reconhecido", "descricao": "Plano não reconhecido."}
     )
-    # Simulando a execução dos testes em uma thread
-    threading.Thread(
-        target=seleciona_plano,
-        args=(
-            current_app.app_context(),
-            plano,
-        ),
-    ).start()
-    return render_template("plano_result.html", plano=plano, info=info)
+    return render_template("plano_result.html", plano=pl.id, info=info)
