@@ -115,10 +115,11 @@ class sensor:
     def list_sensors(self):
         sensors = []
         for index, bus in enumerate(self.list_w1_buses()):
-            sensors.append(self._w1.get_address(index + 1, 1))
+            sensor_address = self._w1.get_address(index + 1, 1)
+            if sensor_address is not None:
+                sensors.append(sensor_address)
 
         return sensors
 
     def get_sensor_amount(self):
-        return len(self._w1.list_w1_buses())
-
+        return len(self.list_sensors())
