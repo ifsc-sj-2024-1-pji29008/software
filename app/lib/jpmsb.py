@@ -16,7 +16,13 @@ class onewire:
 
         # Procurando por sensores
         self.search_all_sensors()
-        
+
+    # Faz uma busca limpa
+    def clean_search(self, w1_bus):
+        for i in range(self._search_tries):
+            self.set_search(w1_bus, 0)
+            time.sleep(0.001)
+    
     # Procura por barramentos 1-wire
     def search_w1_buses(self, w1_system_path):
         w1_buses = []
@@ -31,9 +37,7 @@ class onewire:
     def search_sensors(self, w1_bus):
         ds18b20_sensors = []
 
-        for i in range(self._search_tries):
-            self.set_search(w1_bus, 1)
-            time.sleep(0.001)
+        self.clean_search(w1_bus)
 
         for sensor in os.listdir(os.path.join(self._w1_system_path, w1_bus)):
             if sensor.startswith('28-'):
