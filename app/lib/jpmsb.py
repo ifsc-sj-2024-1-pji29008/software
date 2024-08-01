@@ -1,5 +1,6 @@
 import os
 import time
+import re
 
 class onewire:
     # Construtor da classe
@@ -23,7 +24,7 @@ class onewire:
             if bus.startswith('w1_bus_master'):
                 w1_buses.append(bus)
 
-        w1_buses.sort()
+        w1_buses.sort(key=lambda x: int(re.search(r'\d+$', x).group()))
         return w1_buses
 
     # Procura por sensores em um barramento 1-wire específico
@@ -47,7 +48,7 @@ class onewire:
 
     # Define valores nos pseudo-arquivos de um barramento 1-wire
     def set_value(self, w1_bus, property_name, value):
-        path = os.path.join(self._w1_system_path, w1_bus, property_name);
+        path = os.path.join(self._w1_system_path, w1_bus, property_name)
         with open(path, 'w') as f:
             f.write(str(value))
 
@@ -65,18 +66,18 @@ class onewire:
 
     # Retorna uma lista de sensores DS18B20 em um barramento 1-wire
     def list_sensors(self, w1_bus_number):
-        w1_bus_name = self._w1_buses[w1_bus_number-1]
+        w1_bus_name = self._w1_buses[w1_bus_number - 1]
         return self._w1_ds18b20_sensors[w1_bus_name]
 
     # Retorna o valor de temperatura de um sensor DS18B20 pelo ID
     def get_temperature(self, w1_bus_number, sensor_id):
         if w1_bus_number < 1 or w1_bus_number > len(self._w1_buses):
             return None
-        elif sensor_id < 1 or sensor_id > len(self._w1_ds18b20_sensors[self._w1_buses[w1_bus_number-1]]):
+        elif sensor_id < 1 or sensor_id > len(self._w1_ds18b20_sensors[self._w1_buses[w1_bus_number - 1]]):
             return None
 
-        w1_bus_name = self._w1_buses[w1_bus_number-1]
-        sensor_address = self._w1_ds18b20_sensors[w1_bus_name][sensor_id-1]
+        w1_bus_name = self._w1_buses[w1_bus_number - 1]
+        sensor_address = self._w1_ds18b20_sensors[w1_bus_name][sensor_id - 1]
         path = os.path.join(self._w1_system_path, w1_bus_name, sensor_address, 'temperature')
 
         with open(path, 'r') as f:
@@ -88,15 +89,15 @@ class onewire:
 
         return temperature
 
-    # Obtém o endereco de um sensor DS18B20
+    # Obtém o endereço de um sensor DS18B20
     def get_address(self, w1_bus_number, sensor_id):
         if w1_bus_number < 1 or w1_bus_number > len(self._w1_buses):
             return None
-        elif sensor_id < 1 or sensor_id > len(self._w1_ds18b20_sensors[self._w1_buses[w1_bus_number-1]]):
+        elif sensor_id < 1 or sensor_id > len(self._w1_ds18b20_sensors[self._w1_buses[w1_bus_number - 1]]):
             return None
 
-        w1_bus_name = self._w1_buses[w1_bus_number-1]
-        return self._w1_ds18b20_sensors[w1_bus_name][sensor_id-1]
+        w1_bus_name = self._w1_buses[w1_bus_number - 1]
+        return self._w1_ds18b20_sensors[w1_bus_name][sensor_id - 1]
 
 class sensor:
     def __init__(self, w1_system_path='/sys/bus/w1/devices'):
@@ -118,5 +119,6 @@ class sensor:
 
         return sensors
 
-    def get_sensor_amount():
+    def get_sensor_amount(self):
         return len(self._w1.list_w1_buses())
+
