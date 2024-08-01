@@ -107,6 +107,10 @@ class sensor:
     def __init__(self, w1_system_path='/sys/bus/w1/devices'):
         self._w1 = onewire(w1_system_path)
 
+    def new_search(self):
+        for w1_bus in self.list_w1_buses():
+            self._w1.clean_search(w1_bus)
+
     def get_temperature(self, w1_bus_number):
         return self._w1.get_temperature(w1_bus_number, 1)
 
