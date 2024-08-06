@@ -17,6 +17,8 @@ Este projeto é uma uma aplicação para a Raspberry Pi que possui planos de tes
     - [Adicionar e commitar as alterações](#adicionar-e-commitar-as-alterações)
     - [Enviar as alterações para o repositório remoto](#enviar-as-alterações-para-o-repositório-remoto)
   - [Estrutura do Projeto](#estrutura-do-projeto)
+    - [Diagrama de Blocos](#diagrama-de-blocos)
+
 
 
 ## Tecnologias
@@ -119,3 +121,49 @@ project_root/
 ├── requirements.txt         # Arquivo contendo todas as dependências do projeto
 ├── README.md                # Arquivo README com informações sobre o projeto
 └── run.py                   # Script para iniciar a aplicação Flask em modo de desenvolvimento
+
+```
+### Diagrama de Blocos
+
+```
+
++------------+             +-----------------+
+|   Usuário  | <---------> | Interface Web / |
++------------+             |       API       |
+                           +-----------------+
+                                   |
+                                   v
+                           +-----------------+
+                           |   Controller    |
+                           |     (Flask)     |
+                           +-----------------+
+                                   |
+                                   v
+                           +-----------------+
+                           | Banco de Dados  |
+                           |     (SQLite)    |
+                           +-----------------+
+                                   |
+                                   v
+                           +-----------------+
+                           | Scripts de Teste|
+                           +-----------------+
+                                   |
+                                   v
+                           +-----------------+
+                           |    Sensores     |
+                           |    (DS18b20)    |
+                           +-----------------+
+                                   |
+                                   v
+                           +-----------------+
+                           | Veredito dos    |
+                           |      Testes     |
+                           +-----------------+
+                                   |
+                                   v
+                           +-----------------+
+                           | Interface Web / |
+                           |       API       |
+                           +-----------------+
+
