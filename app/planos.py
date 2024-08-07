@@ -19,11 +19,10 @@ def plano_temperatura(ow_sensor, plano: Plano):
             continue
 
         # Encontra sensor no banco de dados
-        sen = Sensor.query.filter_by(serialNumber=sensor_address).first()
-        if not sen:
-            sen = Sensor(serialNumber=sensor_address)
-            db.session.add(sen)
-            db.session.commit()
+        sensor = Sensor.find_sensor(sensor_address)
+        if not sensor:
+            sensor = Sensor(serialNumber=sensor_address)
+            sensor.add_sensor()
 
         # Verifica se a temperatura foi obtida
         if not temperature:
@@ -35,69 +34,50 @@ def plano_temperatura(ow_sensor, plano: Plano):
         else:
             verdict = "pass"
 
-        db.session.add(
-            SensorData(
+        # Adiciona os dados no sensor
+        sensor_data = SensorData(
                 plano_id=plano.id,
-                sensor_id=sen.id,
+                sensor_id=sensor.id,
                 temperature=temperature,
-                sensor_position=index + 1,
-            )
-        )
-        db.session.add(
-            Vereditos(sensor_id=sen.id, plano_id=plano.id, resultado=verdict)
-        )
+                sensor_position=index + 1,)
+
+        # Adiciona os veriditos
+        vereditos = Vereditos(sensor_id=sensor.id, plano_id=plano.id, resultado=verdict)
+        
         # Salva no banco de dados
-        try:
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            logger.error("Erro ao salvar no banco de dados")
-            logger.debug(e)
+        sensor_data.add_sensorData()
+        vereditos.add_veredito()
 
     # Altera status do plano para complete
-    plano.status = "finalizado"
-    db.session.add(plano)
+    status_plano = Plano.alter_status("finalizado")
 
-    # Encontra status do sistema
-    sis = Sistema.query.first()
-    sis.status = "livre"
-    db.session.add(sis)
+    # Encontra status do sistema e altera
+    status_sistema = Sistema.alter_status("livre")
 
     # Salva no banco de dados
-    try:
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        logger.error("Erro ao salvar no banco de dados")
-        logger.debug(e)
-
+    Plano.add_status(status_plano)
+    Sistema.add_status(status_sistema)
 
 def plano_curto(ow_sensor):
-    logger.info("Inicio plano de curto")
+    logger.info("Início plano de curto")
     # Encontra status do plano e altera para complete
-    sis = Sistema.query.first()
-    sis.status = "complete"
-    db.session.add(sis)
+    status_sistema = Sistema.alter_status("complete")
 
     # Salva no banco de dados
-    db.session.commit()
-
+    Sistema.add_status(status_sistema)
 
 def plano_pinos(ow_sensor):
     logger.info("Inicio plano de pinos")
     # Encontra status do plano e altera para complete
-    sis = Sistema.query.first()
-    sis.status = "complete"
-    db.session.add(sis)
+    status_sistema = Sistema.alter_status("complete")
 
     # Salva no banco de dados
-    db.session.commit()
-
+    Sistema.add_status(status_sistema)
 
 # Plano de testes de temperatura
 def seleciona_plano(app_context, plano_id):
     app_context.push()
-    plano = Plano.query.get(plano_id)
+    plano = Plano.get_id(plano_id)
     ow_sensor = sensor("app/temp/sys/bus/w1/devices")
     if plano.nome == PlanoNome.TEMP.value:
         plano_temperatura(ow_sensor=ow_sensor, plano=plano)
