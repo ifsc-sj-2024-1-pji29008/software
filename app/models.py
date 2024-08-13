@@ -31,6 +31,10 @@ class SensorData(db.Model):
 
     def add_sensorData(self):
         salva_no_banco(self)
+        
+    def get_sensorData(plano_id, sensor_id):
+        sensor_data = SensorData.query.filter_by(plano_id=plano_id, sensor_id=sensor_id).all()
+        return sensor_data
 
 class Sensor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
