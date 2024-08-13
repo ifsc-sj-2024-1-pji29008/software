@@ -7,19 +7,42 @@ from loguru import logger
 
 def plano_temperatura(ow_sensor, plano: Plano):
     # Verifica cada sensor registrado
-    sensors_addresses = ow_sensor.list_sensors()
+    w1_buses = ow_sensor.list_w1_buses()
 
     test_repetition = 5
-    for index, sensor_address in enumerate(sensors_addresses):
+    for index, w1_bus in enumerate(w1_buses):
+        sensor_address = None
+        temperature = None
+
+        try:
+            sensor_address = ow_sensor.get_address(index + 1)
+            logger.debug(sensor_address)
+        except Exception as e:
+            logger.debug(f"Erro ao obter endereco do sensor {index + 1}")
+            continue
+
+        # Verifica se um endereco foi obtido
+        if not sensor_address:
+            continue
+
         for _ in range(test_repetition):
             try:
-                temperature = ow_sensor.get_temperature(index + 1)
+                sensor_address = ow_sensor.get_address(index + 1)
                 logger.debug(sensor_address)
+            except Exception as e:
+                logger.debug(f"Erro ao obter endereco do sensor {index + 1}")
+                continue
+
+            try:
+                temperature = ow_sensor.get_temperature(index + 1)
                 logger.debug(temperature)
+
             except Exception as e:
                 logger.warning(f"Erro ao obter temperatura do sensor {sensor_address}")
                 logger.debug(e)
                 continue
+
+
 
             # Encontra sensor no banco de dados
             sensor = Sensor.find_sensor(sensor_address)
@@ -39,6 +62,8 @@ def plano_temperatura(ow_sensor, plano: Plano):
                     sensor_position=index + 1,)
             
             sensor_data.add_sensorData()
+
+
 
         # Puxa dados de sensor do banco
         sensor_data = SensorData.get_sensorData(plano.id, sensor.id)
