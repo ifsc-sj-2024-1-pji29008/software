@@ -20,9 +20,9 @@ class onewire:
     # Faz uma busca limpa
     def clean_search(self, w1_bus):
         for i in range(self._search_tries):
-            self.set_search(w1_bus, 0)
+            self.set_search(w1_bus, 1)
             time.sleep(0.001)
-    
+
     # Procura por barramentos 1-wire
     def search_w1_buses(self, w1_system_path):
         w1_buses = []
@@ -131,3 +131,4 @@ class sensor:
 
     def get_sensor_amount(self):
         return len(self.list_sensors())
+
