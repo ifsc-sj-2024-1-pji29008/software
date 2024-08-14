@@ -4,6 +4,7 @@ from .models import Plano, Sensor, PlanoNome, SensorData, Sistema, Vereditos
 
 from loguru import logger
 
+import os
 
 def plano_temperatura(ow_sensor, plano: Plano):
     # Verifica cada sensor registrado
@@ -115,7 +116,22 @@ def plano_pinos(ow_sensor):
 def seleciona_plano(app_context, plano_id):
     app_context.push()
     plano = Plano.get_id(plano_id)
-    ow_sensor = sensor("app/temp/sys/bus/w1/devices")
+
+    # Check if the environment variable W1_BUS_DIR is set
+    if os.environ.get("W1_BUS_DIR"):
+        w1_bus_dir = os.environ.get("W1_BUS_DIR")
+
+    # Check if the path /sys/bus/w1/devices exists
+    elif os.path.exists("/sys/bus/w1/devices"):
+        w1_bus_dir = "/sys/bus/w1/devices"
+
+    # Test path
+    else:
+        w1_bus_dir = "app/temp/sys/bus/w1/devices"
+
+    logger.debug(f"W1_BUS_DIR: {w1_bus_dir}")
+    ow_sensor = sensor(w1_bus_dir)
+
     if plano.nome == PlanoNome.TEMP.value:
         plano_temperatura(ow_sensor=ow_sensor, plano=plano)
     elif plano == PlanoNome.CURTO.value:
