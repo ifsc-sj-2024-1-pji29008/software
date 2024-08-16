@@ -54,6 +54,7 @@ def get_plano(id):
             {
                 "id": veredito.id,
                 "sensor": veredito.sensor.serialNumber,
+                "posicao": veredito.sensor_position,
                 "resultado": veredito.resultado,
                 "timestamp": veredito.timestamp,
             }
@@ -66,6 +67,7 @@ def get_plano(id):
                 "timestamp": dado.timestamp,
                 "posicao": dado.sensor_position,
                 "temperatura": dado.temperature,
+                "sensor": dado.sensor.serialNumber,
             }
         )
     return jsonify(to_send)
