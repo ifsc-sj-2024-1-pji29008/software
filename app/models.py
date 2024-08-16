@@ -73,6 +73,7 @@ class Vereditos(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.now)
     comentario = db.Column(db.Text)
     sensor = db.relationship("Sensor", backref=db.backref("vereditos", lazy=True))
+    sensor_position = db.Column(db.Integer, nullable=False)
     plano = db.relationship("Plano", backref=db.backref("vereditos", lazy=True))
 
     def add_veredito(self):

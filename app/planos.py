@@ -64,8 +64,6 @@ def plano_temperatura(ow_sensor, plano: Plano):
             
             sensor_data.add_sensorData()
 
-
-
         # Puxa dados de sensor do banco
         sensor_data = SensorData.get_sensorData(plano.id, sensor.id)
 
@@ -81,7 +79,7 @@ def plano_temperatura(ow_sensor, plano: Plano):
                 break
 
         # Adiciona os veriditos
-        vereditos = Vereditos(sensor_id=sensor.id, plano_id=plano.id, resultado=verdict)
+        vereditos = Vereditos(sensor_id=sensor.id, plano_id=plano.id, resultado=verdict, sensor_position=index + 1)
         
         # Salva no banco de dados
         vereditos.add_veredito()
