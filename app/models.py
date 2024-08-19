@@ -66,7 +66,7 @@ class Plano(db.Model):
         self.status = novoStatus
         salva_no_banco(self)
         return self
-
+    
     def get_id(id):
         id = Plano.query.get(id)
         return id
