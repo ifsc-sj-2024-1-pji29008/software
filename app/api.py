@@ -46,6 +46,9 @@ def get_plano(id):
         plano = Plano.query.filter_by(id=id).first()
     except AttributeError:
         return jsonify({"error": "Plano não encontrado"}), 404
+    
+    if plano.status != "finalizado":
+        return jsonify({"error": "Execução em andamento"}), 400
 
     to_send = {}
     to_send["vereditos"] = []

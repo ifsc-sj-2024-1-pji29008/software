@@ -52,14 +52,11 @@ class Plano(db.Model):
     nome = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(50), nullable=False, default="esperando")
     timestamp = db.Column(db.DateTime, default=datetime.now, unique=True)
-
-    def add_status(novoStatus):
-        salva_no_banco(novoStatus)
     
-    def alter_status(novoStatus):
-        plano = Plano.query.first()
-        plano.status = novoStatus
-        return plano
+    def alter_status(self, novoStatus):        
+        self.status = novoStatus
+        salva_no_banco(self)
+        return self
     
     def get_id(id):
         id = Plano.query.get(id)
@@ -83,9 +80,6 @@ class Sistema(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(50), nullable=False, default="livre")
 
-    def add_status(novoStatus):
-        salva_no_banco(novoStatus)
-
     def find_sistema():
         sistema = Sistema.query.first()
         return sistema
@@ -93,5 +87,6 @@ class Sistema(db.Model):
     def alter_status(novoStatus):
         sistema = Sistema.query.first()
         sistema.status = novoStatus
+        salva_no_banco(sistema)
         return sistema
     
