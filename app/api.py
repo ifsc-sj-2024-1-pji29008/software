@@ -1,15 +1,26 @@
-import re
 from .models import Plano, Sensor, Sistema, PlanoNome
 from .database import db, init_db
 from .planos import seleciona_plano
 
-from flask import Blueprint, jsonify, current_app
+from flask import Blueprint, jsonify, current_app, request
 from loguru import logger
 from flasgger import swag_from
+from jsonschema import validate, ValidationError
 
 import threading
 
 bp = Blueprint("api", __name__, url_prefix="/api")
+
+
+plano_schema = {
+    "type": "object",
+    "properties": {
+        "temperatura": {"type": "number"},
+        "margem_erro": {"type": "number"},
+        "numero_amostras": {"type": "integer"},
+    },
+    "required": ["temperatura", "margem_erro"],  # List required fields
+}
 
 
 #################
@@ -157,9 +168,25 @@ def inicia_plano(nome):
     db.session.add(sis)
 
     pl = Plano(nome=plano_nome.value, status="executando")
+    # Verifica se existe corpo no request, caso sim valida o corpo
+    try:
+        data = request.get_json()
+        validate(instance=data, schema=plano_schema)
+    except ValidationError as e:
+        return jsonify({"error": "Dados inválidos", "message": str(e)}), 400
+
+    # Adicionado os dados do request ao objeto Plano
+    pl.temperaturaEsperada = data["temperatura"]
+    pl.margemErro = data["margem_erro"]
+    if "numero_amostras" in data:
+        pl.numeroAmostras = data["numero_amostras"]
+
+    # Salva no banco de dados
     db.session.add(pl)
     db.session.commit()
-    plano_id = pl.id
+
+    # Inicia thread para execução do plano
+    plano_id = pl.id  # TODO O melhor seria retornar o Plano
     thread = threading.Thread(
         target=seleciona_plano,
         args=(

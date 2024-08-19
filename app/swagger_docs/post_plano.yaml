@@ -6,17 +6,23 @@ parameters:
       type: string
 
 requestBody:
-  required: true
   content:
     application/json:
       schema:
         type: object
         properties:
-          plano:
-            type: string
-            example: "temperatura"
+          temperatura:
+            type: number
+            example: 25
+          margem_erro:
+              type: number
+              example: 2
+          numero_amostras:
+              type: integer
+              example: 10        
         required:
-          - plano
+          - temperatura
+          - margem
 responses:
   200:
     description: Execução iniciada
