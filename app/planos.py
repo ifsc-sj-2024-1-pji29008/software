@@ -6,6 +6,7 @@ from loguru import logger
 
 import os
 
+
 def plano_temperatura(ow_sensor, plano: Plano):
     # Verifica cada sensor registrado
     w1_buses = ow_sensor.list_w1_buses()
@@ -43,8 +44,6 @@ def plano_temperatura(ow_sensor, plano: Plano):
                 logger.debug(e)
                 continue
 
-
-
             # Encontra sensor no banco de dados
             sensor = Sensor.find_sensor(sensor_address)
             if not sensor:
@@ -57,11 +56,12 @@ def plano_temperatura(ow_sensor, plano: Plano):
 
             # Adiciona os dados no sensor
             sensor_data = SensorData(
-                    plano_id=plano.id,
-                    sensor_id=sensor.id,
-                    temperature=temperature,
-                    sensor_position=index + 1,)
-            
+                plano_id=plano.id,
+                sensor_id=sensor.id,
+                temperature=temperature,
+                sensor_position=index + 1,
+            )
+
             sensor_data.add_sensorData()
 
         # Puxa dados de sensor do banco
@@ -70,7 +70,7 @@ def plano_temperatura(ow_sensor, plano: Plano):
         # Verifica se a temperatura foi obtida
         if not sensor_data:
             continue
-        
+
         # Verifica se a temperatura está dentro do limiar
         verdict = "pass"
         for data in sensor_data:
@@ -79,20 +79,22 @@ def plano_temperatura(ow_sensor, plano: Plano):
                 break
 
         # Adiciona os veriditos
-        vereditos = Vereditos(sensor_id=sensor.id, plano_id=plano.id, resultado=verdict, sensor_position=index + 1)
-        
+        vereditos = Vereditos(
+            sensor_id=sensor.id,
+            plano_id=plano.id,
+            resultado=verdict,
+            sensor_position=index + 1,
+        )
+
         # Salva no banco de dados
         vereditos.add_veredito()
 
     # Altera status do plano para complete
-    status_plano = Plano.alter_status("finalizado")
+    plano.alter_status("finalizado")
 
     # Encontra status do sistema e altera
-    status_sistema = Sistema.alter_status("livre")
+    Sistema.alter_status("livre")
 
-    # Salva no banco de dados
-    Plano.add_status(status_plano)
-    Sistema.add_status(status_sistema)
 
 def plano_curto(ow_sensor):
     logger.info("Início plano de curto")
@@ -102,6 +104,7 @@ def plano_curto(ow_sensor):
     # Salva no banco de dados
     Sistema.add_status(status_sistema)
 
+
 def plano_pinos(ow_sensor):
     logger.info("Inicio plano de pinos")
     # Encontra status do plano e altera para complete
@@ -109,6 +112,7 @@ def plano_pinos(ow_sensor):
 
     # Salva no banco de dados
     Sistema.add_status(status_sistema)
+
 
 # Plano de testes de temperatura
 def seleciona_plano(app_context, plano_id):
