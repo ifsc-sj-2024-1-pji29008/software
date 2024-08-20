@@ -60,7 +60,7 @@ class Plano(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.now, unique=True)
     temperaturaEsperada = db.Column(db.Float)
     margemErro = db.Column(db.Float)
-    numeroAmostras = db.Column(db.Integer, default=5)
+    numeroAmostras = db.Column(db.Integer, default=1)
     
     def alter_status(self, novoStatus):        
         self.status = novoStatus

@@ -45,6 +45,9 @@ def get_planos():
                 "nome": plano.nome,
                 "timestamp": plano.timestamp,
                 "status": plano.status,
+                "temperatura": plano.temperaturaEsperada,
+                "margem_erro": plano.margemErro,
+                "numero_amostras": plano.numeroAmostras,
             }
         )
     return jsonify(to_send)
@@ -171,18 +174,21 @@ def inicia_plano(nome):
     db.session.add(sis)
 
     pl = Plano(nome=plano_nome.value, status="executando")
-    # Verifica se existe corpo no request, caso sim valida o corpo
-    try:
-        data = request.get_json()
-        validate(instance=data, schema=plano_schema)
-    except ValidationError as e:
-        return jsonify({"error": "Dados inválidos", "message": str(e)}), 400
+    
+    data = request.get_json()
+    if data:
+        # Verifica se existe corpo no request, caso sim valida o corpo
+        try:
+            data = request.get_json()
+            validate(instance=data, schema=plano_schema)
+        except ValidationError as e:
+            return jsonify({"error": "Dados inválidos", "message": str(e)}), 400
 
-    # Adicionado os dados do request ao objeto Plano
-    pl.temperaturaEsperada = data["temperatura"]
-    pl.margemErro = data["margem_erro"]
-    if "numero_amostras" in data:
-        pl.numeroAmostras = data["numero_amostras"]
+        # Adicionado os dados do request ao objeto Plano
+        pl.temperaturaEsperada = data["temperatura"]
+        pl.margemErro = data["margem_erro"]
+        if "numero_amostras" in data:
+            pl.numeroAmostras = data["numero_amostras"]
 
     # Salva no banco de dados
     db.session.add(pl)

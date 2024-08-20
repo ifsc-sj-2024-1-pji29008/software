@@ -10,8 +10,10 @@ import os
 def plano_temperatura(ow_sensor, plano: Plano):
     # Verifica cada sensor registrado
     w1_buses = ow_sensor.list_w1_buses()
+    
+    
 
-    test_repetition = 5
+    test_repetition = plano.numeroAmostras
     for index, w1_bus in enumerate(w1_buses):
         sensor_address = None
         temperature = None
@@ -70,13 +72,17 @@ def plano_temperatura(ow_sensor, plano: Plano):
         # Verifica se a temperatura foi obtida
         if not sensor_data:
             continue
-
-        # Verifica se a temperatura está dentro do limiar
-        verdict = "pass"
-        for data in sensor_data:
-            if data.temperature < 0 or data.temperature > 30:
-                verdict = "fail"
-                break
+        
+        verdict = "fail"
+        # Verifica se comunicou com o sensor
+        if sensor_data:
+            verdict = "pass"
+            # Verifica existe limiar
+            if plano.temperaturaEsperada:
+                for data in sensor_data:
+                    if data.temperature < plano.temperaturaEsperada - plano.margemErro or data.temperature > plano.temperaturaEsperada + plano.margemErro:
+                        verdict = "fail"
+                        break
 
         # Adiciona os veriditos
         vereditos = Vereditos(
