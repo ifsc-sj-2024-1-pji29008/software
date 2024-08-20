@@ -11,9 +11,12 @@ def plano_temperatura(ow_sensor, plano: Plano):
     # Verifica cada sensor registrado
     w1_buses = ow_sensor.list_w1_buses()
     
-    
+    try:
+        test_repetition = plano.numeroAmostras
+    except Exception as e: 
+        test_repetition = 1
+        
 
-    test_repetition = plano.numeroAmostras
     for index, w1_bus in enumerate(w1_buses):
         sensor_address = None
         temperature = None
