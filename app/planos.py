@@ -133,6 +133,7 @@ def seleciona_plano(app_context, plano_id):
 
     logger.debug(f"W1_BUS_DIR: {w1_bus_dir}")
     ow_sensor = sensor(w1_bus_dir)
+    ow_sensor.new_search()
 
     if plano.nome == PlanoNome.TEMP.value:
         plano_temperatura(ow_sensor=ow_sensor, plano=plano)
